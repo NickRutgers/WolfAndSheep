@@ -278,7 +278,7 @@ function ratePositions(
     const distanceY = Math.abs(sheepPosition.y - wolfPosition.y);
     const distance = Math.max(distanceX, distanceY);
     score -= 100 / distance;
-    score += Math.pow(sheepPosition.y, 1.4) * 30;
+    score += Math.pow(sheepPosition.y, 1.6) * 30;
   });
   const distances = [
     getClosestEdgeDistance(wolfPosition, sheepPositions, -1, -1),
@@ -362,11 +362,6 @@ function getBestMove(
   moves.forEach(move => {
     const newSituation = applyMoveToSituation(move, depth, wolfPosition, sheepPositions, turn);
     const scoreForMove = rateSituation(newSituation.depth, newSituation.wolfPosition, newSituation.sheepPositions, newSituation.turn, rateForPlayer);
-    // console.log(JSON.stringify({
-    //   move,
-    //   scoreForMove,
-    //   // newSituation,
-    // }, null, 2), newSituation);
     if (!bestMove) {
       bestMove = move;
       bestScore = scoreForMove;
