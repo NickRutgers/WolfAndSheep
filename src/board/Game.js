@@ -137,7 +137,7 @@ function getPossibleMovesForWolf(wolf = wolfPosition, sheep = sheepPositions) {
     return !sheep.find(sheepPosition => sheepPosition.x === position.x && sheepPosition.y === position.y);
   })
   .map(to => ({
-    from: wolfPosition,
+    from: wolf,
     to,
   }));
 
@@ -230,13 +230,13 @@ export function canMovePiece(from, to) {
 }
 
 /**
- * AI shit
+ * AI
  */
 
-function getPossibleMoves(wolf = wolfPosition, sheep = sheepPositions) {
-  if (turn === ItemTypes.WOLF) {
+function getPossibleMoves(_turn, wolf = wolfPosition, sheep = sheepPositions) {
+  if (_turn === ItemTypes.WOLF) {
     return getPossibleMovesForWolf(wolf, sheep);
-  } else if (turn === ItemTypes.SHEEP) {
+  } else if (_turn === ItemTypes.SHEEP) {
     return getPossibleMovesForSheep(wolf, sheep);
   }
   return [];
@@ -278,7 +278,7 @@ function ratePositions(
     const distanceY = Math.abs(sheepPosition.y - wolfPosition.y);
     const distance = Math.max(distanceX, distanceY);
     score -= 100 / distance;
-    score += Math.pow(sheepPosition.y, 1.6) * 30;
+    score += Math.pow(sheepPosition.y, 1.4) * 50;
   });
   const distances = [
     getClosestEdgeDistance(wolfPosition, sheepPositions, -1, -1),
@@ -306,7 +306,7 @@ function rateSituation(
       rateForPlayer
     );
   } else {
-    const moves = getPossibleMoves(wolfPosition, sheepPositions);
+    const moves = getPossibleMoves(turn, wolfPosition, sheepPositions);
     let worstMove = null;
     let worstScore = null;
     moves.forEach(move => {
@@ -356,7 +356,7 @@ function getBestMove(
   turn, // 'wolf'|'sheep'
   rateForPlayer // 'wolf'|'sheep'
 ) {
-  const moves = getPossibleMoves(wolfPosition, sheepPositions);
+  const moves = getPossibleMoves(turn, wolfPosition, sheepPositions);
   let bestMove = null;
   let bestScore = null;
   moves.forEach(move => {
